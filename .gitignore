@@ -1,0 +1,44 @@
+# Dart/Pub
+.dart_tool/
+.packages
+.pub-cache/
+build/
+
+# Flutter specific
+.flutter-plugins
+.flutter-plugins-dependencies
+.flutter-versions
+generated_plugin_registrant.dart
+
+# Android specific
+android/.gradle/
+android/.idea/
+android/local.properties
+android/**/gradle-wrapper.jar
+
+# iOS (if applicable)
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/Flutter/App.framework
+ios/Flutter/Generated.xcconfig
+ios/.generated/
+
+# macOS
+.DS_Store
+
+# IDEs
+.idea/
+.vscode/
+*.iml
+
+# Logs
+*.log
+
+# Others
+.env
+*.keystore
+*.jks
+*.p12
+*.pem
