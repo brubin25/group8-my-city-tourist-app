@@ -1,122 +1,153 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ThunderBayToursApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class ThunderBayToursApp extends StatelessWidget {
+  const ThunderBayToursApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // TRY THIS: Try running your application with "flutter run". You'll see
-        // the application has a purple toolbar. Then, without quitting the app,
-        // try changing the seedColor in the colorScheme below to Colors.green
-        // and then invoke "hot reload" (save your changes or press the "hot
-        // reload" button in a Flutter-supported IDE, or press "r" if you used
-        // the command line to start the app).
-        //
-        // Notice that the counter didn't reset back to zero; the application
-        // state is not lost during the reload. To reset the state, use hot
-        // restart instead.
-        //
-        // This works for code too, not just values: Most code changes can be
-        // tested with just a hot reload.
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      title: 'Thunder Bay Tours',
+      theme: ThemeData(primarySwatch: Colors.teal),
+      home: const HomeScreen(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
+/// Model for each tourist spot
+class TouristSpot {
+  final int id;
   final String title;
+  final String synopsis;
+  final String thumbnailUrl;
 
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  // Driftscape thumbnails
+  static const String _thumbBase = 'https://webapi.driftscape.com/document/id';
+  static const String _thumbParams = '?Img=300&Crop=1:1;16:9;5:4&Contain';
+
+  TouristSpot({
+    required this.id,
+    required this.title,
+    required this.synopsis,
+    required this.thumbnailUrl,
+  });
+
+  factory TouristSpot.fromJson(Map<String, dynamic> json) {
+    final rawId = json['FEATURE_THUMBNAIL_URL'] as String;
+    final fullUrl = '$_thumbBase/$rawId$_thumbParams';
+
+    return TouristSpot(
+      id: json['ID'] as int,
+      title: json['FEATURE_TITLE'] as String,
+      synopsis: json['FEATURE_SYNOPSIS'] as String? ?? '',
+      thumbnailUrl: fullUrl,
+    );
+  }
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class ApiService {
+  static const _baseUrl = 'https://webapi.driftscape.com';
+  static const _featureEP = '/feature';
+  static const _apiKey = 'U0VNQW54WHJkdnVoUTUyMkIwRDNxdz09';
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+  static Future<List<TouristSpot>> fetchSpots() async {
+    final uri = Uri.parse('$_baseUrl$_featureEP');
+
+    final response = await http.post(
+      uri,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'limit': 30,
+        'offset': 0,
+        'sort_from': '[-89.27625905011959,48.46087567573946]',
+        'id_list': null,
+        'view': 'list',
+        'filter': '',
+        'layers': {'places': true, 'events': true, 'tours': true},
+        'username': '',
+        'key': _apiKey,
+        'referrer': 'webapp.driftscape.com',
+      }),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to load spots (${response.statusCode})');
+    }
+
+    final Map<String, dynamic> data = jsonDecode(response.body);
+    final rows = (data['rows'] as List).cast<Map<String, dynamic>>();
+    return rows.map((r) => TouristSpot.fromJson(r)).toList();
   }
+}
+
+// Home Screen showing spots
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // TRY THIS: Try changing the color here to a specific color (to
-        // Colors.amber, perhaps?) and trigger a hot reload to see the AppBar
-        // change color while the other colors stay the same.
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
+      appBar: AppBar(title: const Text('Thunder Bay Tours')),
+      body: FutureBuilder<List<TouristSpot>>(
+        future: ApiService.fetchSpots(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          }
+          final spots = snapshot.data!;
+          return GridView.builder(
+            padding: const EdgeInsets.all(8),
+            itemCount: spots.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 0.8,
+              crossAxisSpacing: 8,
+              mainAxisSpacing: 8,
             ),
-          ],
-        ),
+            itemBuilder: (context, i) {
+              final spot = spots[i];
+              return Card(
+                elevation: 3,
+                clipBehavior: Clip.hardEdge,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    Expanded(
+                      child: Image.network(
+                        spot.thumbnailUrl,
+                        fit: BoxFit.cover,
+                        errorBuilder:
+                            (_, __, ___) =>
+                                const Center(child: Icon(Icons.broken_image)),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(6.0),
+                      child: Text(
+                        spot.title,
+                        style: const TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          );
+        },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
