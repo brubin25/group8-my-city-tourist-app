@@ -16,6 +16,7 @@ class SpotDetailScreen extends StatelessWidget {
             // thumbnail
             Hero(
               tag: spot.thumbnailUrl,
+              transitionOnUserGestures: true,
               child: Image.network(
                 spot.thumbnailUrl,
                 fit: BoxFit.cover,

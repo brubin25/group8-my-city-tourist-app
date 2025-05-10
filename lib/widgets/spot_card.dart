@@ -25,6 +25,7 @@ class SpotCard extends StatelessWidget {
       children: [
         Hero(
           tag: spot.thumbnailUrl,
+          transitionOnUserGestures: true,
           child: Image.network(
             spot.thumbnailUrl,
             fit: BoxFit.cover,
