@@ -62,8 +62,10 @@ class HomeScreenState extends State<HomeScreen> {
                   Navigator.push(
                     context,
                     PageRouteBuilder(
-                      transitionDuration: Duration(milliseconds: 600),
-                      reverseTransitionDuration: Duration(milliseconds: 600),
+                      transitionDuration: const Duration(milliseconds: 600),
+                      reverseTransitionDuration: const Duration(
+                        milliseconds: 600,
+                      ),
                       pageBuilder: (_, __, ___) => SpotDetailScreen(spot: spot),
                       transitionsBuilder: (
                         context,
