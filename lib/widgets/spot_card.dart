@@ -1,14 +1,19 @@
 import 'package:city_tourist_app/widgets/parallax_delegate.dart';
+// lib/widgets/spot_card.dart
+
 import 'package:flutter/material.dart';
+
 import '../models/tourist_spot.dart';
 
+/// A card widget that displays a tourist spot with a parallax background, gradient overlay, and title.
 class SpotCard extends StatelessWidget {
   final TouristSpot spot;
   final VoidCallback? onTap;
+  final GlobalKey _backgroundImageKey;
 
-  SpotCard({required this.spot, this.onTap, super.key});
-
-  final GlobalKey _backgroundImageKey = GlobalKey();
+  SpotCard({Key? key, required this.spot, this.onTap})
+    : _backgroundImageKey = GlobalKey(),
+      super(key: key);
 
   Widget _buildImage(BuildContext context) {
     return Flow(
@@ -63,7 +68,7 @@ class SpotCard extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext c) {
+  Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Card(
@@ -71,7 +76,7 @@ class SpotCard extends StatelessWidget {
         color: Colors.white,
         clipBehavior: Clip.hardEdge,
         child: Stack(
-          children: [_buildImage(c), _buildGradient(), _buildTitle()],
+          children: [_buildImage(context), _buildGradient(), _buildTitle()],
         ),
       ),
     );

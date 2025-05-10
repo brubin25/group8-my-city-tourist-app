@@ -3,7 +3,7 @@ import '../models/tourist_spot.dart';
 
 class SpotDetailScreen extends StatelessWidget {
   final TouristSpot spot;
-  const SpotDetailScreen({Key? key, required this.spot}) : super(key: key);
+  const SpotDetailScreen({super.key, required this.spot});
 
   @override
   Widget build(BuildContext context) {

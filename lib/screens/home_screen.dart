@@ -7,10 +7,10 @@ import 'spot_detail_screen.dart';
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
   @override
-  _HomeScreenState createState() => _HomeScreenState();
+  HomeScreenState createState() => HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class HomeScreenState extends State<HomeScreen> {
   late Future<List<TouristSpot>> _futureSpots;
   final _api = ApiService();
 
@@ -22,8 +22,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    const itemHeight = 250.0;
+    final screenWidth = MediaQuery.of(context).size.width - 16;
+    final aspectRatio = screenWidth / itemHeight;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Thunder Bay Tours')),
+      backgroundColor: Colors.deepPurple,
+      appBar: AppBar(
+        title: const Text('Thunder Bay Tours'),
+        centerTitle: true,
+        backgroundColor: Colors.deepPurple,
+        foregroundColor: Colors.white,
+        elevation: 0,
+      ),
       body: FutureBuilder<List<TouristSpot>>(
         future: _futureSpots,
         builder: (ctx, snap) {
@@ -37,25 +48,26 @@ class _HomeScreenState extends State<HomeScreen> {
           return GridView.builder(
             padding: const EdgeInsets.all(8),
             itemCount: spots.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 0.8,
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 1,
+              childAspectRatio: aspectRatio,
               crossAxisSpacing: 8,
               mainAxisSpacing: 8,
             ),
-            itemBuilder:
-                (_, i) => SpotCard(
-                  spot: spots[i],
-                  // navigate to a detail screen
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => SpotDetailScreen(spot: spots[i]),
-                      ),
-                    );
-                  },
-                ),
+            itemBuilder: (context, i) {
+              final spot = spots[i];
+              return SpotCard(
+                spot: spot,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => SpotDetailScreen(spot: spot),
+                    ),
+                  );
+                },
+              );
+            },
           );
         },
       ),
