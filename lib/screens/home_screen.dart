@@ -61,8 +61,18 @@ class HomeScreenState extends State<HomeScreen> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (_) => SpotDetailScreen(spot: spot),
+                    PageRouteBuilder(
+                      transitionDuration: Duration(milliseconds: 600),
+                      reverseTransitionDuration: Duration(milliseconds: 600),
+                      pageBuilder: (_, __, ___) => SpotDetailScreen(spot: spot),
+                      transitionsBuilder: (
+                        context,
+                        animation,
+                        secondaryAnimation,
+                        child,
+                      ) {
+                        return FadeTransition(opacity: animation, child: child);
+                      },
                     ),
                   );
                 },
