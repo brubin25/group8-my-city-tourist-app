@@ -14,17 +14,19 @@ class SpotDetailScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             // thumbnail
-            Image.network(
-              spot.thumbnailUrl,
-              fit: BoxFit.cover,
-              height: 240,
-              errorBuilder:
-                  (_, __, ___) => const SizedBox(
-                    height: 240,
-                    child: Center(child: Icon(Icons.broken_image, size: 48)),
-                  ),
+            Hero(
+              tag: spot.thumbnailUrl,
+              child: Image.network(
+                spot.thumbnailUrl,
+                fit: BoxFit.cover,
+                height: 240,
+                errorBuilder:
+                    (_, __, ___) => const SizedBox(
+                      height: 240,
+                      child: Center(child: Icon(Icons.broken_image, size: 48)),
+                    ),
+              ),
             ),
-
             // title
             Padding(
               padding: const EdgeInsets.all(16.0),
