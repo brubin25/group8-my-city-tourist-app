@@ -5,6 +5,7 @@ import '../widgets/spot_card.dart';
 import 'spot_detail_screen.dart';
 import 'gallery_screen.dart';
 import 'info_screen.dart';
+import '../widgets/app_drawer.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -102,52 +103,7 @@ class HomeScreenState extends State<HomeScreen> {
         foregroundColor: Colors.white,
         elevation: 0,
       ),
-      drawer: Drawer(
-        backgroundColor: Colors.white,
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.deepPurple, Colors.deepPurpleAccent],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
-                  Text(
-                    'Thunder Bay',
-                    style: TextStyle(fontSize: 24, color: Colors.white),
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    'Explore the best spots',
-                    style: TextStyle(fontSize: 14, color: Colors.white70),
-                  ),
-                ],
-              ),
-            ),
-            ListTile(
-              leading: const Icon(Icons.place),
-              title: const Text('Spots'),
-              onTap: () => _onDrawerItemTap(0),
-            ),
-            ListTile(
-              leading: const Icon(Icons.photo),
-              title: const Text('Gallery'),
-              onTap: () => _onDrawerItemTap(1),
-            ),
-            ListTile(
-              leading: const Icon(Icons.info_outline),
-              title: const Text('Info'),
-              onTap: () => _onDrawerItemTap(2),
-            ),
-          ],
-        ),
-      ),
+      drawer: AppDrawer(onItemSelected: _onDrawerItemTap),
       body: _getSelectedScreen(),
     );
   }
