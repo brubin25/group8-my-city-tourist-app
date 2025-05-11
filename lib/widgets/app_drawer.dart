@@ -50,6 +50,12 @@ class AppDrawer extends StatelessWidget {
             title: const Text('Info'),
             onTap: () => onItemSelected(2),
           ),
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.login),
+            title: const Text('Login'),
+            onTap: () => onItemSelected(3),
+          ),
         ],
       ),
     );

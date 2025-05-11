@@ -5,6 +5,7 @@ import '../widgets/spot_card.dart';
 import 'spot_detail_screen.dart';
 import 'gallery_screen.dart';
 import 'info_screen.dart';
+import 'login_screen.dart';
 import '../widgets/app_drawer.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -36,7 +37,7 @@ class HomeScreenState extends State<HomeScreen> {
           return const Center(child: CircularProgressIndicator());
         }
         if (snap.hasError) {
-          return Center(child: Text('Error: ${snap.error}'));
+          return Center(child: Text('Error: \${snap.error}'));
         }
         final spots = snap.data!;
         return GridView.builder(
@@ -80,6 +81,8 @@ class HomeScreenState extends State<HomeScreen> {
         return const GalleryScreen();
       case 2:
         return const InfoScreen();
+      case 3:
+        return const LoginScreen();
       default:
         return _buildSpotsView();
     }
