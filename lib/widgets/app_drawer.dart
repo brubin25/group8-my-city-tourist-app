@@ -8,56 +8,90 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: Colors.white,
-      child: ListView(
-        padding: EdgeInsets.zero,
+      child: Stack(
+        fit: StackFit.expand,
         children: [
-          DrawerHeader(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Colors.deepPurple, Colors.deepPurpleAccent],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
+          // Background image
+          Image.asset(
+            'assets/images/gallery/gallery2.jpg',
+            fit: BoxFit.cover,
+          ),
+
+          // Dark overlay for readability
+          Container(
+            color: Colors.black.withOpacity(0.4),
+          ),
+
+          // Drawer content
+          Column(
+            children: [
+              const DrawerHeader(
+                margin: EdgeInsets.zero,
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Thunder Bay',
+                      style: TextStyle(
+                        fontSize: 26,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    SizedBox(height: 6),
+                    Text(
+                      'Explore the best spots',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.white70,
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text(
-                  'Thunder Bay',
-                  style: TextStyle(fontSize: 24, color: Colors.white),
+              Expanded(
+                child: ListView(
+                  children: [
+                    _buildMenuItem(context, Icons.location_on_outlined, 'Spots', 0),
+                    _buildMenuItem(context, Icons.image_outlined, 'Gallery', 1),
+                    _buildMenuItem(context, Icons.info_outline_rounded, 'Info', 2),
+                    _buildMenuItem(context, Icons.map_outlined, 'Map', 3),
+                    _buildMenuItem(context, Icons.favorite_border, 'Favorites', 4),
+                  ],
                 ),
-                SizedBox(height: 8),
-                Text(
-                  'Explore the best spots',
-                  style: TextStyle(fontSize: 14, color: Colors.white70),
-                ),
-              ],
-            ),
-          ),
-          ListTile(
-            leading: const Icon(Icons.place),
-            title: const Text('Spots'),
-            onTap: () => onItemSelected(0),
-          ),
-          ListTile(
-            leading: const Icon(Icons.photo),
-            title: const Text('Gallery'),
-            onTap: () => onItemSelected(1),
-          ),
-          ListTile(
-            leading: const Icon(Icons.info_outline),
-            title: const Text('Info'),
-            onTap: () => onItemSelected(2),
-          ),
-          const Divider(),
-          ListTile(
-            leading: const Icon(Icons.login),
-            title: const Text('Login'),
-            onTap: () => onItemSelected(3),
+              ),
+              const Divider(color: Colors.white70, thickness: 1),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: _buildMenuItem(context, Icons.login_rounded, 'Login', 5),
+              ),
+            ],
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildMenuItem(
+      BuildContext context,
+      IconData icon,
+      String label,
+      int index,
+      ) {
+    return ListTile(
+      leading: Icon(icon, color: Colors.white),
+      title: Text(
+        label,
+        style: const TextStyle(
+          fontSize: 16,
+          color: Colors.white,
+        ),
+      ),
+      onTap: () => onItemSelected(index),
+      horizontalTitleGap: 8,
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20),
     );
   }
 }
