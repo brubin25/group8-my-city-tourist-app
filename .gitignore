@@ -42,3 +42,5 @@ ios/.generated/
 *.jks
 *.p12
 *.pem
+*.DS_Store
+*.metadata
