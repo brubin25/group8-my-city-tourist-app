@@ -12,9 +12,12 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _usernameController = TextEditingController();
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
   late Database _db;
+
+  bool _isSignUpMode = false;
 
   @override
   void initState() {
@@ -41,37 +44,44 @@ class _LoginScreenState extends State<LoginScreen> {
 
   Future<void> _signup(BuildContext context) async {
     if (_formKey.currentState!.validate()) {
+      if (_passwordController.text != _confirmPasswordController.text) {
+        _showMessage(context, 'Passwords do not match.');
+        return;
+      }
       try {
         await _db.insert('users', {
-          'username': _usernameController.text,
+          'username': _emailController.text,
           'password': _passwordController.text,
         });
         _showMessage(context, 'Signup successful!');
+        setState(() => _isSignUpMode = false);
       } catch (e) {
-        _showMessage(context, 'Username already exists.');
+        _showMessage(context, 'Email already exists.');
       }
     }
   }
 
   Future<void> _login(BuildContext context) async {
-    final result = await _db.query(
-      'users',
-      where: 'username = ? AND password = ?',
-      whereArgs: [
-        _usernameController.text,
-        _passwordController.text,
-      ],
-    );
+    if (_formKey.currentState!.validate()) {
+      final result = await _db.query(
+        'users',
+        where: 'username = ? AND password = ?',
+        whereArgs: [
+          _emailController.text,
+          _passwordController.text,
+        ],
+      );
 
-    if (result.isNotEmpty) {
-      _showMessage(context, 'Login successful!');
-      Future.delayed(const Duration(milliseconds: 600), () {
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (context) => const HomeScreen()),
-        );
-      });
-    } else {
-      _showMessage(context, 'Invalid credentials.');
+      if (result.isNotEmpty) {
+        _showMessage(context, 'Login successful!');
+        Future.delayed(const Duration(milliseconds: 600), () {
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
+          );
+        });
+      } else {
+        _showMessage(context, 'Invalid credentials.');
+      }
     }
   }
 
@@ -79,6 +89,15 @@ class _LoginScreenState extends State<LoginScreen> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(msg)),
     );
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _db.close();
+    super.dispose();
   }
 
   @override
@@ -90,11 +109,10 @@ class _LoginScreenState extends State<LoginScreen> {
           padding: const EdgeInsets.all(24.0),
           child: SingleChildScrollView(
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
-                  'Welcome Back',
-                  style: TextStyle(
+                Text(
+                  _isSignUpMode ? 'Create Account' : 'Welcome Back',
+                  style: const TextStyle(
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
                     color: Colors.deepPurple,
@@ -106,13 +124,20 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Column(
                     children: [
                       TextFormField(
-                        controller: _usernameController,
+                        controller: _emailController,
                         decoration: const InputDecoration(
-                          labelText: 'Username',
+                          labelText: 'Email Address',
                           border: OutlineInputBorder(),
                         ),
-                        validator: (value) =>
-                        value!.isEmpty ? 'Please enter username' : null,
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter email';
+                          }
+                          if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                            return 'Enter a valid email';
+                          }
+                          return null;
+                        },
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
@@ -125,17 +150,41 @@ class _LoginScreenState extends State<LoginScreen> {
                         validator: (value) =>
                         value!.isEmpty ? 'Please enter password' : null,
                       ),
+                      if (_isSignUpMode) ...[
+                        const SizedBox(height: 16),
+                        TextFormField(
+                          controller: _confirmPasswordController,
+                          obscureText: true,
+                          decoration: const InputDecoration(
+                            labelText: 'Confirm Password',
+                            border: OutlineInputBorder(),
+                          ),
+                          validator: (value) => value!.isEmpty
+                              ? 'Please confirm password'
+                              : null,
+                        ),
+                      ],
                       const SizedBox(height: 24),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      Wrap(
+                        alignment: WrapAlignment.center,
+                        spacing: 16,
+                        runSpacing: 8,
                         children: [
                           ElevatedButton(
-                            onPressed: () => _login(context),
-                            child: const Text('Login'),
+                            onPressed: () {
+                              _isSignUpMode
+                                  ? _signup(context)
+                                  : _login(context);
+                            },
+                            child: Text(_isSignUpMode ? 'Sign Up' : 'Login'),
                           ),
-                          ElevatedButton(
-                            onPressed: () => _signup(context),
-                            child: const Text('Sign Up'),
+                          TextButton(
+                            onPressed: () {
+                              setState(() => _isSignUpMode = !_isSignUpMode);
+                            },
+                            child: Text(_isSignUpMode
+                                ? 'Already have an account?'
+                                : 'Don\'t have an account? Sign Up'),
                           ),
                         ],
                       ),
@@ -148,13 +197,5 @@ class _LoginScreenState extends State<LoginScreen> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _usernameController.dispose();
-    _passwordController.dispose();
-    _db.close();
-    super.dispose();
   }
 }
