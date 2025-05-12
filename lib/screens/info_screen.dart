@@ -1,7 +1,27 @@
+// info_screen.dart
+
 import 'package:flutter/material.dart';
+// import for launching email feedback
+import 'package:url_launcher/url_launcher.dart';
 
 class InfoScreen extends StatelessWidget {
   const InfoScreen({super.key});
+
+  // Email feedback launcher
+  static Future<void> _launchFeedback() async {
+    final Uri emailUri = Uri(
+      scheme: 'mailto',
+      path: 'support@tbaytours.app',
+      queryParameters: {
+        'subject': 'Feedback: Thunder Bay Tours',
+      },
+    );
+    if (await canLaunchUrl(emailUri)) {
+      await launchUrl(emailUri);
+    } else {
+      print('Could not launch $emailUri');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +31,7 @@ class InfoScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 📸 Hero banner
+          // Hero banner
           ClipRRect(
             borderRadius: BorderRadius.circular(16),
             child: Image.asset(
@@ -23,23 +43,20 @@ class InfoScreen extends StatelessWidget {
           ),
           const SizedBox(height: 32),
 
-          // 🔹 Section: About App
+          // Section: About App
           Text(
             'Thunder Bay Tours',
-            style: theme.textTheme.headlineMedium?.copyWith(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-            ),
+            style: theme.textTheme.headlineMedium
+                ?.copyWith(color: Colors.white),
           ),
-          const SizedBox(height: 16),
-          const Text(
-            'Thunder Bay Tours is a modern travel companion designed to help visitors and locals explore the city\'s top attractions. '
-                'Whether it\'s stunning nature trails, vibrant cultural sites, or winter activities, this app provides an intuitive and curated experience.',
-            style: TextStyle(fontSize: 16, color: Colors.white70, height: 1.6),
+          const SizedBox(height: 12),
+          Text(
+            'Thunder Bay Tours is a modern travel companion designed to help visitors and locals explore the city\'s top attractions. Whether it\'s stunning nature trails, vibrant cultural sites, or winter activities, this app provides an intuitive and curated experience.',
+            style: const TextStyle(color: Colors.white70),
           ),
           const SizedBox(height: 32),
 
-          // 🔹 Section: App Details
+          // Section: App Details
           Text(
             'App Details',
             style: theme.textTheme.titleMedium?.copyWith(
@@ -62,6 +79,8 @@ class InfoScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
+
+          // Expandable team roster
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -69,18 +88,60 @@ class InfoScreen extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: Colors.white12),
             ),
-            child: Row(
-              children: const [
-                Icon(Icons.code, color: Colors.white70),
-                SizedBox(width: 12),
-                Text(
-                  'Group 8 – Mobile Programming \n Computer Science Department',
-                  style: TextStyle(color: Colors.white70, fontSize: 15),
+            child: Theme(
+              data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+              child: ExpansionTile(
+                iconColor: Colors.white70,
+                collapsedIconColor: Colors.white70,
+                title: Row(
+                  children: const [
+                    Icon(Icons.code, color: Colors.white70),
+                    SizedBox(width: 12),
+                    Text(
+                      'Group 8 – Mobile Programming',
+                      style: TextStyle(color: Colors.white70, fontSize: 15),
+                    ),
+                  ],
                 ),
-              ],
+                // Team members list
+                childrenPadding: const EdgeInsets.only(left: 48, bottom: 8),
+                children: const [
+                  Text('• Chengrun, Yecheng, Zhiyuan – Home Screen',
+                      style: TextStyle(color: Colors.white60)),
+                  SizedBox(height: 4),
+                  Text('• Kathan, Vivek – Map Screen',
+                      style: TextStyle(color: Colors.white60)),
+                  SizedBox(height: 4),
+                  Text('• Gulshan, Omprakash – Tourist Spot Details Screen',
+                      style: TextStyle(color: Colors.white60)),
+                  SizedBox(height: 4),
+                  Text('• Briand, Zhijie – Gallery + About/Info Screen',
+                      style: TextStyle(color: Colors.white60)),
+                  SizedBox(height: 4),
+                  Text('• Aesha, Safira – Favorites/Bookmarks + Search/Filter',
+                      style: TextStyle(color: Colors.white60)),
+                ],
+              ),
             ),
           ),
           const SizedBox(height: 48),
+
+          // Feedback Button Section
+          Center(
+            child: ElevatedButton.icon(
+              onPressed: _launchFeedback,
+              icon: const Icon(Icons.feedback, color: Colors.white),
+              label: const Text('Send Feedback',
+                  style: TextStyle(color: Colors.white)),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.white24,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 24),
         ],
       ),
     );
@@ -88,16 +149,10 @@ class InfoScreen extends StatelessWidget {
 
   Widget _buildInfoRow({required String label, required String value}) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 8),
+      padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         children: [
-          Text(
-            '$label:',
-            style: const TextStyle(
-              fontWeight: FontWeight.w600,
-              color: Colors.white70,
-            ),
-          ),
+          Text(label, style: const TextStyle(color: Colors.white70)),
           const SizedBox(width: 8),
           Expanded(
             child: Text(
