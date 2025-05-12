@@ -30,6 +30,12 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  sqflite: ^2.3.2+1
+  path: ^1.8.3
+  intl: ^0.19.0
   http: ^0.13.0
   carousel_slider:
     path: packages/carousel_slider_fixed
@@ -73,6 +79,9 @@ flutter:
     - assets/images/thunderbaylogo.jpg
     - assets/images/gallery/
     - assets/images/info/
+
+
+  generate: true
 
   # An image asset can refer to one or more resolution-specific "variants", see2
   # https://flutter.dev/to/resolution-aware-images

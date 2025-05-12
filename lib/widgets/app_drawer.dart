@@ -1,49 +1,50 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AppDrawer extends StatelessWidget {
   final Function(int) onItemSelected;
+  final Function(Locale) onLanguageChanged;
 
-  const AppDrawer({super.key, required this.onItemSelected});
+  const AppDrawer({
+    super.key,
+    required this.onItemSelected,
+    required this.onLanguageChanged,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final loc = AppLocalizations.of(context)!;
+
     return Drawer(
       child: Stack(
         fit: StackFit.expand,
         children: [
-          // Background image
           Image.asset(
             'assets/images/gallery/gallery2.jpg',
             fit: BoxFit.cover,
           ),
-
-          // Dark overlay for readability
-          Container(
-            color: Colors.black.withOpacity(0.4),
-          ),
-
-          // Drawer content
+          Container(color: Colors.black.withOpacity(0.4)),
           Column(
             children: [
-              const DrawerHeader(
+              DrawerHeader(
                 margin: EdgeInsets.zero,
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Thunder Bay',
-                      style: TextStyle(
+                      loc.appTitle,
+                      style: const TextStyle(
                         fontSize: 26,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                       ),
                     ),
-                    SizedBox(height: 6),
+                    const SizedBox(height: 6),
                     Text(
-                      'Explore the best spots',
-                      style: TextStyle(
+                      loc.explore,
+                      style: const TextStyle(
                         fontSize: 14,
                         color: Colors.white70,
                       ),
@@ -54,18 +55,19 @@ class AppDrawer extends StatelessWidget {
               Expanded(
                 child: ListView(
                   children: [
-                    _buildMenuItem(context, Icons.location_on_outlined, 'Spots', 0),
-                    _buildMenuItem(context, Icons.image_outlined, 'Gallery', 1),
-                    _buildMenuItem(context, Icons.info_outline_rounded, 'Info', 2),
-                    _buildMenuItem(context, Icons.map_outlined, 'Map', 3),
-                    _buildMenuItem(context, Icons.favorite_border, 'Favorites', 4),
+                    _buildMenuItem(context, Icons.location_on_outlined, loc.spots, 0),
+                    _buildMenuItem(context, Icons.image_outlined, loc.gallery, 1),
+                    _buildMenuItem(context, Icons.info_outline_rounded, loc.info, 2),
+                    _buildMenuItem(context, Icons.map_outlined, loc.map, 3),
+                    _buildMenuItem(context, Icons.favorite_border, loc.favorites, 4),
+                    _buildLanguageItem(context, loc),
                   ],
                 ),
               ),
-              const Divider(color: Colors.white70, thickness: 1),
+              const Divider(color: Colors.white70),
               Padding(
                 padding: const EdgeInsets.only(bottom: 12),
-                child: _buildMenuItem(context, Icons.login_rounded, 'Login', 5),
+                child: _buildMenuItem(context, Icons.login_rounded, loc.login, 5),
               ),
             ],
           ),
@@ -75,23 +77,50 @@ class AppDrawer extends StatelessWidget {
   }
 
   Widget _buildMenuItem(
-      BuildContext context,
-      IconData icon,
-      String label,
-      int index,
-      ) {
+      BuildContext context, IconData icon, String label, int index) {
     return ListTile(
       leading: Icon(icon, color: Colors.white),
       title: Text(
         label,
-        style: const TextStyle(
-          fontSize: 16,
-          color: Colors.white,
-        ),
+        style: const TextStyle(fontSize: 16, color: Colors.white),
       ),
       onTap: () => onItemSelected(index),
       horizontalTitleGap: 8,
       contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+    );
+  }
+
+  Widget _buildLanguageItem(BuildContext context, AppLocalizations loc) {
+    return ListTile(
+      leading: const Icon(Icons.language, color: Colors.white),
+      title: Text(loc.language, style: const TextStyle(color: Colors.white)),
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+            title: Text(loc.chooseLanguage),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ListTile(
+                  title: Text(loc.english),
+                  onTap: () {
+                    onLanguageChanged(const Locale('en'));
+                    Navigator.pop(context);
+                  },
+                ),
+                ListTile(
+                  title: Text(loc.french),
+                  onTap: () {
+                    onLanguageChanged(const Locale('fr'));
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

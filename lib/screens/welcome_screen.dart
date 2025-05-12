@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'home_screen.dart';
 
 class WelcomeScreen extends StatelessWidget {
-  const WelcomeScreen({super.key});
+  final void Function(Locale)? onLocaleChange;
+
+  const WelcomeScreen({super.key, this.onLocaleChange});
 
   @override
   Widget build(BuildContext context) {
@@ -28,8 +30,6 @@ class WelcomeScreen extends StatelessWidget {
                 fit: BoxFit.contain,
               ),
             ),
-
-
             const Text(
               'Welcome to',
               style: TextStyle(fontSize: 24, color: Colors.black87),
@@ -44,19 +44,21 @@ class WelcomeScreen extends StatelessWidget {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 40),
-
             ElevatedButton(
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => const HomeScreen()),
+                  MaterialPageRoute(
+                    builder: (context) => HomeScreen(
+                      onLocaleChange: onLocaleChange,
+                    ),
+                  ),
                 );
               },
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.deepPurple,
                 foregroundColor: Colors.white,
-                padding:
-                const EdgeInsets.symmetric(horizontal: 48, vertical: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 16),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),

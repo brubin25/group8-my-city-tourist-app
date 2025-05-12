@@ -1,0 +1,15 @@
+{
+  "@@locale": "fr",
+  "appTitle": "Thunder Bay",
+  "explore": "Explorez les meilleurs endroits",
+  "language": "Langue",
+  "spots": "Lieux",
+  "gallery": "Galerie",
+  "info": "Info",
+  "map": "Carte",
+  "favorites": "Favoris",
+  "login": "Connexion",
+  "chooseLanguage": "Choisissez la langue",
+  "english": "Anglais",
+  "french": "Français"
+}

@@ -9,7 +9,10 @@ import 'login_screen.dart';
 import '../widgets/app_drawer.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final void Function(Locale)? onLocaleChange;
+
+  const HomeScreen({super.key, this.onLocaleChange});
+
   @override
   HomeScreenState createState() => HomeScreenState();
 }
@@ -37,7 +40,7 @@ class HomeScreenState extends State<HomeScreen> {
           return const Center(child: CircularProgressIndicator());
         }
         if (snap.hasError) {
-          return Center(child: Text('Error: \${snap.error}'));
+          return Center(child: Text('Error: ${snap.error}'));
         }
         final spots = snap.data!;
         return GridView.builder(
@@ -89,7 +92,7 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   void _onDrawerItemTap(int index) {
-    Navigator.of(context).pop(); // Close the drawer
+    Navigator.of(context).pop(); // Close drawer
     setState(() {
       _selectedDrawerIndex = index;
     });
@@ -106,7 +109,10 @@ class HomeScreenState extends State<HomeScreen> {
         foregroundColor: Colors.white,
         elevation: 0,
       ),
-      drawer: AppDrawer(onItemSelected: _onDrawerItemTap),
+      drawer: AppDrawer(
+        onItemSelected: _onDrawerItemTap,
+        onLanguageChanged: widget.onLocaleChange ?? (_) {},
+      ),
       body: _getSelectedScreen(),
     );
   }
