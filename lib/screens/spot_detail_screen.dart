@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import '../models/tourist_spot.dart';
 
 class SpotDetailScreen extends StatelessWidget {
   final TouristSpot spot;
-  const SpotDetailScreen({super.key, required this.spot});
+  const SpotDetailScreen({Key? key, required this.spot}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +14,7 @@ class SpotDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // thumbnail
+            // Thumbnail
             Hero(
               tag: spot.thumbnailUrl,
               transitionOnUserGestures: true,
@@ -28,7 +29,8 @@ class SpotDetailScreen extends StatelessWidget {
                     ),
               ),
             ),
-            // title
+
+            // Title
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Text(
@@ -37,13 +39,13 @@ class SpotDetailScreen extends StatelessWidget {
               ),
             ),
 
-            // description
+            // HTML description
             if (spot.synopsis.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                child: Text(
-                  spot.synopsis,
-                  style: Theme.of(context).textTheme.bodyMedium,
+                child: Html(
+                  data: spot.synopsis,
+                  style: {"p": Style(margin: Margins.symmetric(vertical: 8))},
                 ),
               ),
 
