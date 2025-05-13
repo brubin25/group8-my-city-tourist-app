@@ -26,8 +26,11 @@
 	<true/>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
-	<key>UIMainStoryboardFile</key>
-	<string>Main</string>
+    <key>UIMainStoryboardFile</key>
+    <string>Main</string>
+    <key>GMSApiKey</key>
+    <string>AIzaSyAoqQklIP-XMX2ARV-t8NCBOqZD_jfF8zA</string>
+
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
