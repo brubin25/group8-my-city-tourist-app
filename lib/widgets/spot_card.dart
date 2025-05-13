@@ -1,11 +1,7 @@
 import 'package:city_tourist_app/widgets/parallax_delegate.dart';
-// lib/widgets/spot_card.dart
-
 import 'package:flutter/material.dart';
-
 import '../models/tourist_spot.dart';
 
-/// A card widget that displays a tourist spot with a parallax background, gradient overlay, and title.
 class SpotCard extends StatelessWidget {
   final TouristSpot spot;
   final VoidCallback? onTap;
@@ -61,7 +57,7 @@ class SpotCard extends StatelessWidget {
         spot.title,
         style: const TextStyle(
           color: Colors.white,
-          fontSize: 16,
+          fontSize: 12,
           fontWeight: FontWeight.bold,
         ),
       ),

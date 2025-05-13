@@ -1,5 +1,3 @@
-// lib/screens/spot_detail_screen.dart
-
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import '../models/tourist_spot.dart';
@@ -16,7 +14,7 @@ class SpotDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Hero’d thumbnail
+            // Thumbnail
             Hero(
               tag: spot.thumbnailUrl,
               transitionOnUserGestures: true,
@@ -47,11 +45,7 @@ class SpotDetailScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Html(
                   data: spot.synopsis,
-                  style: {
-                    // use Margins not EdgeInsets here:
-                    "p": Style(margin: Margins.symmetric(vertical: 8)),
-                    // you can style other tags similarly if you want
-                  },
+                  style: {"p": Style(margin: Margins.symmetric(vertical: 8))},
                 ),
               ),
 
