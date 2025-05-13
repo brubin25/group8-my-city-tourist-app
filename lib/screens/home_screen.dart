@@ -84,9 +84,9 @@ class HomeScreenState extends State<HomeScreen> {
       case 1:
         return const GalleryScreen();
       case 2:
-        return const InfoScreen();
-      case 4:
         return const Placeholder(); // Optional: replace with FavoritesScreen
+      case 4:
+        return const InfoScreen();
       case 5:
         return const LoginScreen(); // ✅ Handles the Login menu item
       default:

@@ -1,13 +1,9 @@
-// info_screen.dart
-
 import 'package:flutter/material.dart';
-// import for launching email feedback
 import 'package:url_launcher/url_launcher.dart';
 
 class InfoScreen extends StatelessWidget {
   const InfoScreen({super.key});
 
-  // Email feedback launcher
   static Future<void> _launchFeedback() async {
     final Uri emailUri = Uri(
       scheme: 'mailto',
@@ -29,19 +25,16 @@ class InfoScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Hero banner
           ClipRRect(
             borderRadius: BorderRadius.circular(16),
             child: Image.asset(
               'assets/images/info/info.png',
               fit: BoxFit.cover,
-              errorBuilder:
-                  (_, __, ___) => const Icon(Icons.broken_image, size: 100),
+              errorBuilder: (_, __, ___) => const Icon(Icons.broken_image, size: 100),
             ),
           ),
           const SizedBox(height: 32),
 
-          // Section: About App
           Text(
             'Thunder Bay Tours',
             style: theme.textTheme.headlineMedium?.copyWith(
@@ -55,7 +48,6 @@ class InfoScreen extends StatelessWidget {
           ),
           const SizedBox(height: 32),
 
-          // Section: App Details
           Text(
             'App Details',
             style: theme.textTheme.titleMedium?.copyWith(
@@ -69,7 +61,6 @@ class InfoScreen extends StatelessWidget {
           _buildInfoRow(label: 'Build Date', value: 'May 2025'),
           const SizedBox(height: 32),
 
-          // 🔹 Section: Developed By
           Text(
             'Developed By',
             style: theme.textTheme.titleMedium?.copyWith(
@@ -79,7 +70,6 @@ class InfoScreen extends StatelessWidget {
           ),
           const SizedBox(height: 12),
 
-          // Expandable team roster
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
@@ -88,9 +78,7 @@ class InfoScreen extends StatelessWidget {
               border: Border.all(color: Colors.white12),
             ),
             child: Theme(
-              data: Theme.of(
-                context,
-              ).copyWith(dividerColor: Colors.transparent),
+              data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
               child: const ExpansionTile(
                 iconColor: Colors.white70,
                 collapsedIconColor: Colors.white70,
@@ -98,38 +86,45 @@ class InfoScreen extends StatelessWidget {
                   children: [
                     Icon(Icons.code, color: Colors.white70),
                     SizedBox(width: 12),
-                    Text(
-                      'Group 8 – Mobile Programming',
-                      style: TextStyle(color: Colors.white70, fontSize: 15),
+                    Flexible(
+                      child: Text(
+                        'Group 8 – Mobile Programming',
+                        style: TextStyle(color: Colors.white70, fontSize: 15),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                   ],
                 ),
-                // Team members list
-                childrenPadding: EdgeInsets.only(left: 48, bottom: 8),
+                // Left-aligned names (no extra left padding to avoid overflow)
                 children: [
-                  Text(
-                    '• Chengrun, Yecheng, Zhiyuan – Home Screen',
-                    style: TextStyle(color: Colors.white60),
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                    '• Kathan, Vivek – Map Screen',
-                    style: TextStyle(color: Colors.white60),
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                    '• Gulshan, Omprakash – Tourist Spot Details Screen',
-                    style: TextStyle(color: Colors.white60),
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                    '• Briand, Zhijie – Gallery + About/Info Screen',
-                    style: TextStyle(color: Colors.white60),
-                  ),
-                  SizedBox(height: 4),
-                  Text(
-                    '• Aesha, Safira – Favorites/Bookmarks + Search/Filter',
-                    style: TextStyle(color: Colors.white60),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('• Aesha', style: TextStyle(color: Colors.white60)),
+                        SizedBox(height: 4),
+                        Text('• Briand', style: TextStyle(color: Colors.white60)),
+                        SizedBox(height: 4),
+                        Text('• Chengrun', style: TextStyle(color: Colors.white60)),
+                        SizedBox(height: 4),
+                        Text('• Gulshan', style: TextStyle(color: Colors.white60)),
+                        SizedBox(height: 4),
+                        Text('• Kathan', style: TextStyle(color: Colors.white60)),
+                        SizedBox(height: 4),
+                        Text('• Omprakash', style: TextStyle(color: Colors.white60)),
+                        SizedBox(height: 4),
+                        Text('• Safira', style: TextStyle(color: Colors.white60)),
+                        SizedBox(height: 4),
+                        Text('• Vivek', style: TextStyle(color: Colors.white60)),
+                        SizedBox(height: 4),
+                        Text('• Yecheng', style: TextStyle(color: Colors.white60)),
+                        SizedBox(height: 4),
+                        Text('• Zhijie', style: TextStyle(color: Colors.white60)),
+                        SizedBox(height: 4),
+                        Text('• Zhiyuan', style: TextStyle(color: Colors.white60)),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -137,7 +132,6 @@ class InfoScreen extends StatelessWidget {
           ),
           const SizedBox(height: 48),
 
-          // Feedback Button Section
           Center(
             child: ElevatedButton.icon(
               onPressed: _launchFeedback,

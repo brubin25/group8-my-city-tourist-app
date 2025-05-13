@@ -57,9 +57,9 @@ class AppDrawer extends StatelessWidget {
                   children: [
                     _buildMenuItem(context, Icons.location_on_outlined, loc.spots, 0),
                     _buildMenuItem(context, Icons.image_outlined, loc.gallery, 1),
-                    _buildMenuItem(context, Icons.info_outline_rounded, loc.info, 2),
+                    _buildMenuItem(context, Icons.favorite_border, loc.favorites, 2),
                     _buildMenuItem(context, Icons.map_outlined, loc.map, 3),
-                    _buildMenuItem(context, Icons.favorite_border, loc.favorites, 4),
+                    _buildMenuItem(context, Icons.info_outline_rounded, loc.info, 4),
                     _buildLanguageItem(context, loc),
                   ],
                 ),
