@@ -31,6 +31,7 @@ dependencies:
   flutter:
     sdk: flutter
   url_launcher: ^6.1.7
+  flutter_html: ^3.0.0
 
   flutter_localizations:
     sdk: flutter
@@ -81,7 +82,6 @@ flutter:
     - assets/images/thunderbaylogo.jpg
     - assets/images/gallery/
     - assets/images/info/
-
 
   generate: true
 

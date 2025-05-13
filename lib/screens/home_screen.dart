@@ -47,7 +47,7 @@ class HomeScreenState extends State<HomeScreen> {
           padding: const EdgeInsets.all(8),
           itemCount: spots.length,
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 1,
+            crossAxisCount: 2,
             childAspectRatio: aspectRatio,
             crossAxisSpacing: 8,
             mainAxisSpacing: 8,
@@ -61,7 +61,9 @@ class HomeScreenState extends State<HomeScreen> {
                   context,
                   PageRouteBuilder(
                     transitionDuration: const Duration(milliseconds: 600),
-                    reverseTransitionDuration: const Duration(milliseconds: 600),
+                    reverseTransitionDuration: const Duration(
+                      milliseconds: 600,
+                    ),
                     pageBuilder: (_, __, ___) => SpotDetailScreen(spot: spot),
                     transitionsBuilder: (context, animation, _, child) {
                       return FadeTransition(opacity: animation, child: child);
