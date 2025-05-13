@@ -10,7 +10,7 @@ final List<String> imgList = [
   'https://images.unsplash.com/photo-1519985176271-adb1088fa94c?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=a0c8d632e977f94e5d312d9893258f59&auto=format&fit=crop&w=1355&q=80'
 ];
 
-void main() => runApp(CarouselDemo());
+void main() => runApp(const CarouselDemo());
 
 final themeMode = ValueNotifier(2);
 
@@ -27,23 +27,23 @@ class CarouselDemo extends StatelessWidget {
           themeMode: ThemeMode.values.toList()[value as int],
           debugShowCheckedModeBanner: false,
           routes: {
-            '/': (ctx) => CarouselDemoHome(),
-            '/basic': (ctx) => BasicDemo(),
-            '/nocenter': (ctx) => NoCenterDemo(),
-            '/image': (ctx) => ImageSliderDemo(),
-            '/complicated': (ctx) => ComplicatedImageDemo(),
-            '/enlarge': (ctx) => EnlargeStrategyDemo(),
-            '/manual': (ctx) => ManuallyControlledSlider(),
-            '/noloop': (ctx) => NoonLoopingDemo(),
-            '/vertical': (ctx) => VerticalSliderDemo(),
-            '/fullscreen': (ctx) => FullscreenSliderDemo(),
-            '/ondemand': (ctx) => OnDemandCarouselDemo(),
-            '/indicator': (ctx) => CarouselWithIndicatorDemo(),
-            '/prefetch': (ctx) => PrefetchImageDemo(),
-            '/reason': (ctx) => CarouselChangeReasonDemo(),
-            '/position': (ctx) => KeepPageviewPositionDemo(),
-            '/multiple': (ctx) => MultipleItemDemo(),
-            '/zoom': (ctx) => EnlargeStrategyZoomDemo(),
+            '/': (ctx) => const CarouselDemoHome(),
+            '/basic': (ctx) => const BasicDemo(),
+            '/nocenter': (ctx) => const NoCenterDemo(),
+            '/image': (ctx) => const ImageSliderDemo(),
+            '/complicated': (ctx) => const ComplicatedImageDemo(),
+            '/enlarge': (ctx) => const EnlargeStrategyDemo(),
+            '/manual': (ctx) => const ManuallyControlledSlider(),
+            '/noloop': (ctx) => const NoonLoopingDemo(),
+            '/vertical': (ctx) => const VerticalSliderDemo(),
+            '/fullscreen': (ctx) => const FullscreenSliderDemo(),
+            '/ondemand': (ctx) => const OnDemandCarouselDemo(),
+            '/indicator': (ctx) => const CarouselWithIndicatorDemo(),
+            '/prefetch': (ctx) => const PrefetchImageDemo(),
+            '/reason': (ctx) => const CarouselChangeReasonDemo(),
+            '/position': (ctx) => const KeepPageviewPositionDemo(),
+            '/multiple': (ctx) => const MultipleItemDemo(),
+            '/zoom': (ctx) => const EnlargeStrategyZoomDemo(),
           },
         );
       },
@@ -85,7 +85,7 @@ class CarouselDemoHome extends StatelessWidget {
         ],
       ),
       body: ListView(
-        children: <Widget>[
+        children: const <Widget>[
           DemoItem('Basic demo', '/basic'),
           DemoItem('No center mode demo', '/nocenter'),
           DemoItem('Image carousel slider', '/image'),

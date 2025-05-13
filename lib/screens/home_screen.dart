@@ -10,7 +10,6 @@ import 'map_screen.dart';
 import '../widgets/app_drawer.dart';
 import 'favorites_screen.dart';
 
-
 class HomeScreen extends StatefulWidget {
   final void Function(Locale)? onLocaleChange;
 
@@ -24,7 +23,7 @@ class HomeScreenState extends State<HomeScreen> {
   late Future<List<TouristSpot>> _futureSpots;
   final _api = ApiService();
   int _selectedDrawerIndex = 0;
-  Set<TouristSpot> _favorites = {};
+  final Set<TouristSpot> _favorites = {};
 
   @override
   void initState() {
@@ -44,10 +43,7 @@ class HomeScreenState extends State<HomeScreen> {
 
   Widget _buildSpotGrid(List<TouristSpot> spots) {
     const itemHeight = 250.0;
-    final screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width - 16;
+    final screenWidth = MediaQuery.of(context).size.width - 16;
     final aspectRatio = screenWidth / itemHeight;
 
     return GridView.builder(
@@ -72,7 +68,8 @@ class HomeScreenState extends State<HomeScreen> {
                   PageRouteBuilder(
                     transitionDuration: const Duration(milliseconds: 600),
                     reverseTransitionDuration: const Duration(
-                        milliseconds: 600),
+                      milliseconds: 600,
+                    ),
                     pageBuilder: (_, __, ___) => SpotDetailScreen(spot: spot),
                     transitionsBuilder: (context, animation, _, child) {
                       return FadeTransition(opacity: animation, child: child);
@@ -119,7 +116,9 @@ class HomeScreenState extends State<HomeScreen> {
     if (spots.isEmpty) {
       return const Center(
         child: Text(
-            'No favorites added yet', style: TextStyle(color: Colors.white70)),
+          'No favorites added yet',
+          style: TextStyle(color: Colors.white70),
+        ),
       );
     }
     return _buildSpotGrid(spots);

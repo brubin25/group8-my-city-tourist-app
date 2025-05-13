@@ -24,9 +24,9 @@ class _InfoScreenState extends State<InfoScreen> {
     if (await canLaunchUrl(emailUri)) {
       await launchUrl(emailUri);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Could not open email app')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Could not open email app')));
     }
   }
 
@@ -50,14 +50,17 @@ class _InfoScreenState extends State<InfoScreen> {
             child: Image.asset(
               'assets/images/info/info.png',
               fit: BoxFit.cover,
-              errorBuilder: (_, __, ___) => const Icon(Icons.broken_image, size: 100),
+              errorBuilder:
+                  (_, __, ___) => const Icon(Icons.broken_image, size: 100),
             ),
           ),
           const SizedBox(height: 32),
 
           Text(
             'Thunder Bay Tours',
-            style: theme.textTheme.headlineMedium?.copyWith(color: Colors.white),
+            style: theme.textTheme.headlineMedium?.copyWith(
+              color: Colors.white,
+            ),
           ),
           const SizedBox(height: 12),
           const Text(
@@ -175,7 +178,7 @@ class _InfoScreenState extends State<InfoScreen> {
                   SizedBox(height: 4),
                   Text('• Briand', style: TextStyle(color: Colors.white60)),
                   SizedBox(height: 4),
-                  Text('• Chengrun', style: TextStyle(color: Colors.white60)),
+                  Text('• Chengran', style: TextStyle(color: Colors.white60)),
                   SizedBox(height: 4),
                   Text('• Gulshan', style: TextStyle(color: Colors.white60)),
                   SizedBox(height: 4),

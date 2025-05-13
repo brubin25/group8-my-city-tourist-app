@@ -15,7 +15,7 @@ class _MapScreenState extends State<MapScreen> {
   late GoogleMapController mapController;
 
   final List<Marker> markers = [
-    Marker(
+    const Marker(
       markerId: MarkerId('spot1'),
       position: LatLng(48.3809, -89.2477),
       infoWindow: InfoWindow(title: 'Marina Park'),
@@ -36,18 +36,22 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Map View")),
-      body: currentLocation == null
-          ? Center(child: CircularProgressIndicator())
-          : GoogleMap(
-        initialCameraPosition: CameraPosition(
-          target: LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
-          zoom: 13,
-        ),
-        markers: Set.from(markers),
-        myLocationEnabled: true,
-        onMapCreated: (controller) => mapController = controller,
-      ),
+      appBar: AppBar(title: const Text("Map View")),
+      body:
+          currentLocation == null
+              ? const Center(child: CircularProgressIndicator())
+              : GoogleMap(
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(
+                    currentLocation!.latitude!,
+                    currentLocation!.longitude!,
+                  ),
+                  zoom: 13,
+                ),
+                markers: Set.from(markers),
+                myLocationEnabled: true,
+                onMapCreated: (controller) => mapController = controller,
+              ),
     );
   }
 }
