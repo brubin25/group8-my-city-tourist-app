@@ -6,7 +6,7 @@ import 'spot_detail_screen.dart';
 import 'gallery_screen.dart';
 import 'info_screen.dart';
 import 'login_screen.dart';
-import 'map_screen.dart'; // ⬅️ Import your map screen
+import 'map_screen.dart';
 import '../widgets/app_drawer.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -62,9 +62,7 @@ class HomeScreenState extends State<HomeScreen> {
                   context,
                   PageRouteBuilder(
                     transitionDuration: const Duration(milliseconds: 600),
-                    reverseTransitionDuration: const Duration(
-                      milliseconds: 600,
-                    ),
+                    reverseTransitionDuration: const Duration(milliseconds: 600),
                     pageBuilder: (_, __, ___) => SpotDetailScreen(spot: spot),
                     transitionsBuilder: (context, animation, _, child) {
                       return FadeTransition(opacity: animation, child: child);
@@ -88,7 +86,9 @@ class HomeScreenState extends State<HomeScreen> {
       case 2:
         return const InfoScreen();
       case 4:
-        return const LoginScreen();
+        return const Placeholder(); // Optional: replace with FavoritesScreen
+      case 5:
+        return const LoginScreen(); // ✅ Handles the Login menu item
       default:
         return _buildSpotsView();
     }
@@ -98,7 +98,7 @@ class HomeScreenState extends State<HomeScreen> {
     Navigator.of(context).pop(); // Close drawer
 
     if (index == 3) {
-      // Map screen - navigate directly
+      // Navigate directly to map screen
       Navigator.push(
         context,
         MaterialPageRoute(builder: (_) => const MapScreen()),
