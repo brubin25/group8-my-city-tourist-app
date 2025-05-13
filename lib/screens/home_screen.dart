@@ -6,6 +6,7 @@ import 'spot_detail_screen.dart';
 import 'gallery_screen.dart';
 import 'info_screen.dart';
 import 'login_screen.dart';
+import 'map_screen.dart'; // ⬅️ Import your map screen
 import '../widgets/app_drawer.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -84,7 +85,7 @@ class HomeScreenState extends State<HomeScreen> {
         return const GalleryScreen();
       case 2:
         return const InfoScreen();
-      case 3:
+      case 4:
         return const LoginScreen();
       default:
         return _buildSpotsView();
@@ -93,9 +94,18 @@ class HomeScreenState extends State<HomeScreen> {
 
   void _onDrawerItemTap(int index) {
     Navigator.of(context).pop(); // Close drawer
-    setState(() {
-      _selectedDrawerIndex = index;
-    });
+
+    if (index == 3) {
+      // Map screen - navigate directly
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const MapScreen()),
+      );
+    } else {
+      setState(() {
+        _selectedDrawerIndex = index;
+      });
+    }
   }
 
   @override

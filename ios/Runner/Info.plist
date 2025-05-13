@@ -45,5 +45,16 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
+
+	<!-- Permissions for Google Maps -->
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>This app uses your location to show tourist spots nearby on the map.</string>
+
+	<!-- Allow HTTP for Google Maps and other APIs -->
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 </dict>
 </plist>
