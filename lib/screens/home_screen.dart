@@ -8,6 +8,8 @@ import 'info_screen.dart';
 import 'login_screen.dart';
 import 'map_screen.dart';
 import '../widgets/app_drawer.dart';
+import 'favorites_screen.dart';
+
 
 class HomeScreen extends StatefulWidget {
   final void Function(Locale)? onLocaleChange;
@@ -22,6 +24,7 @@ class HomeScreenState extends State<HomeScreen> {
   late Future<List<TouristSpot>> _futureSpots;
   final _api = ApiService();
   int _selectedDrawerIndex = 0;
+  Set<TouristSpot> _favorites = {};
 
   @override
   void initState() {
@@ -29,33 +32,36 @@ class HomeScreenState extends State<HomeScreen> {
     _futureSpots = _api.fetchSpots();
   }
 
-  Widget _buildSpotsView() {
+  void _toggleFavorite(TouristSpot spot) {
+    setState(() {
+      if (_favorites.contains(spot)) {
+        _favorites.remove(spot);
+      } else {
+        _favorites.add(spot);
+      }
+    });
+  }
+
+  Widget _buildSpotGrid(List<TouristSpot> spots) {
     const itemHeight = 250.0;
     final screenWidth = MediaQuery.of(context).size.width - 16;
     final aspectRatio = screenWidth / itemHeight;
 
-    return FutureBuilder<List<TouristSpot>>(
-      future: _futureSpots,
-      builder: (ctx, snap) {
-        if (snap.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (snap.hasError) {
-          return Center(child: Text('Error: ${snap.error}'));
-        }
-        final spots = snap.data!;
-        return GridView.builder(
-          padding: const EdgeInsets.all(8),
-          itemCount: spots.length,
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: aspectRatio,
-            crossAxisSpacing: 8,
-            mainAxisSpacing: 8,
-          ),
-          itemBuilder: (context, i) {
-            final spot = spots[i];
-            return SpotCard(
+    return GridView.builder(
+      padding: const EdgeInsets.all(8),
+      itemCount: spots.length,
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio: aspectRatio,
+        crossAxisSpacing: 8,
+        mainAxisSpacing: 8,
+      ),
+      itemBuilder: (context, i) {
+        final spot = spots[i];
+        final isFavorite = _favorites.contains(spot);
+        return Stack(
+          children: [
+            SpotCard(
               spot: spot,
               onTap: () {
                 Navigator.push(
@@ -70,11 +76,48 @@ class HomeScreenState extends State<HomeScreen> {
                   ),
                 );
               },
-            );
-          },
+            ),
+            Positioned(
+              top: 8,
+              right: 8,
+              child: IconButton(
+                icon: Icon(
+                  isFavorite ? Icons.favorite : Icons.favorite_border,
+                  color: isFavorite ? Colors.redAccent : Colors.white,
+                  size: 24,
+                ),
+                onPressed: () => _toggleFavorite(spot),
+              ),
+            ),
+          ],
         );
       },
     );
+  }
+
+  Widget _buildSpotsView() {
+    return FutureBuilder<List<TouristSpot>>(
+      future: _futureSpots,
+      builder: (ctx, snap) {
+        if (snap.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (snap.hasError) {
+          return Center(child: Text('Error: ${snap.error}'));
+        }
+        return _buildSpotGrid(snap.data!);
+      },
+    );
+  }
+
+  Widget _buildFavoritesView() {
+    final spots = _favorites.toList();
+    if (spots.isEmpty) {
+      return const Center(
+        child: Text('No favorites added yet', style: TextStyle(color: Colors.white70)),
+      );
+    }
+    return _buildSpotGrid(spots);
   }
 
   Widget _getSelectedScreen() {
@@ -84,11 +127,11 @@ class HomeScreenState extends State<HomeScreen> {
       case 1:
         return const GalleryScreen();
       case 2:
-        return const Placeholder(); // Optional: replace with FavoritesScreen
-      case 4:
+        return FavoritesScreen(favorites: _favorites.toList());
+      case 3:
         return const InfoScreen();
-      case 5:
-        return const LoginScreen(); // ✅ Handles the Login menu item
+      case 4:
+        return const LoginScreen();
       default:
         return _buildSpotsView();
     }
@@ -97,8 +140,7 @@ class HomeScreenState extends State<HomeScreen> {
   void _onDrawerItemTap(int index) {
     Navigator.of(context).pop(); // Close drawer
 
-    if (index == 3) {
-      // Navigate directly to map screen
+    if (index == 5) {
       Navigator.push(
         context,
         MaterialPageRoute(builder: (_) => const MapScreen()),
