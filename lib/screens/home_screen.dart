@@ -44,7 +44,10 @@ class HomeScreenState extends State<HomeScreen> {
 
   Widget _buildSpotGrid(List<TouristSpot> spots) {
     const itemHeight = 250.0;
-    final screenWidth = MediaQuery.of(context).size.width - 16;
+    final screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width - 16;
     final aspectRatio = screenWidth / itemHeight;
 
     return GridView.builder(
@@ -68,7 +71,8 @@ class HomeScreenState extends State<HomeScreen> {
                   context,
                   PageRouteBuilder(
                     transitionDuration: const Duration(milliseconds: 600),
-                    reverseTransitionDuration: const Duration(milliseconds: 600),
+                    reverseTransitionDuration: const Duration(
+                        milliseconds: 600),
                     pageBuilder: (_, __, ___) => SpotDetailScreen(spot: spot),
                     transitionsBuilder: (context, animation, _, child) {
                       return FadeTransition(opacity: animation, child: child);
@@ -114,7 +118,8 @@ class HomeScreenState extends State<HomeScreen> {
     final spots = _favorites.toList();
     if (spots.isEmpty) {
       return const Center(
-        child: Text('No favorites added yet', style: TextStyle(color: Colors.white70)),
+        child: Text(
+            'No favorites added yet', style: TextStyle(color: Colors.white70)),
       );
     }
     return _buildSpotGrid(spots);
@@ -129,8 +134,10 @@ class HomeScreenState extends State<HomeScreen> {
       case 2:
         return FavoritesScreen(favorites: _favorites.toList());
       case 3:
-        return const InfoScreen();
+        return const MapScreen();
       case 4:
+        return const InfoScreen();
+      case 5:
         return const LoginScreen();
       default:
         return _buildSpotsView();
@@ -154,20 +161,32 @@ class HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.deepPurple,
-      appBar: AppBar(
-        title: const Text('Thunder Bay Tours'),
-        centerTitle: true,
-        backgroundColor: Colors.deepPurple,
-        foregroundColor: Colors.white,
-        elevation: 0,
+    return Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFF5B247A), // rich purple
+            Color(0xFF1B1A4F), // deep indigo
+          ],
+        ),
       ),
-      drawer: AppDrawer(
-        onItemSelected: _onDrawerItemTap,
-        onLanguageChanged: widget.onLocaleChange ?? (_) {},
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: AppBar(
+          title: const Text('Thunder Bay Tours'),
+          centerTitle: true,
+          backgroundColor: Colors.transparent,
+          foregroundColor: Colors.white,
+          elevation: 0,
+        ),
+        drawer: AppDrawer(
+          onItemSelected: _onDrawerItemTap,
+          onLanguageChanged: widget.onLocaleChange ?? (_) {},
+        ),
+        body: _getSelectedScreen(),
       ),
-      body: _getSelectedScreen(),
     );
   }
 }

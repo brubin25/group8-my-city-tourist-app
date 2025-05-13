@@ -1,25 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class InfoScreen extends StatelessWidget {
+class InfoScreen extends StatefulWidget {
   const InfoScreen({super.key});
 
-  static Future<void> _launchFeedback() async {
+  @override
+  State<InfoScreen> createState() => _InfoScreenState();
+}
+
+class _InfoScreenState extends State<InfoScreen> {
+  final TextEditingController _feedbackController = TextEditingController();
+
+  Future<void> _launchFeedback() async {
+    final String feedback = _feedbackController.text.trim();
     final Uri emailUri = Uri(
       scheme: 'mailto',
       path: 'support@tbaytours.app',
-      queryParameters: {'subject': 'Feedback: Thunder Bay Tours'},
+      queryParameters: {
+        'subject': 'Feedback: Thunder Bay Tours',
+        'body': feedback.isEmpty ? 'Your feedback here...' : feedback,
+      },
     );
     if (await canLaunchUrl(emailUri)) {
       await launchUrl(emailUri);
     } else {
-      print('Could not launch $emailUri');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not open email app')),
+      );
     }
+  }
+
+  @override
+  void dispose() {
+    _feedbackController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(24),
       child: Column(
@@ -37,9 +57,7 @@ class InfoScreen extends StatelessWidget {
 
           Text(
             'Thunder Bay Tours',
-            style: theme.textTheme.headlineMedium?.copyWith(
-              color: Colors.white,
-            ),
+            style: theme.textTheme.headlineMedium?.copyWith(color: Colors.white),
           ),
           const SizedBox(height: 12),
           const Text(
@@ -69,68 +87,35 @@ class InfoScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 12),
+          _buildTeamInfo(),
 
-          Container(
-            padding: const EdgeInsets.all(16),
-            decoration: BoxDecoration(
-              color: Colors.white10,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.white12),
+          const SizedBox(height: 32),
+
+          Text(
+            'Feedback',
+            style: theme.textTheme.titleMedium?.copyWith(
+              color: Colors.white,
+              fontWeight: FontWeight.w600,
             ),
-            child: Theme(
-              data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
-              child: const ExpansionTile(
-                iconColor: Colors.white70,
-                collapsedIconColor: Colors.white70,
-                title: Row(
-                  children: [
-                    Icon(Icons.code, color: Colors.white70),
-                    SizedBox(width: 12),
-                    Flexible(
-                      child: Text(
-                        'Group 8 – Mobile Programming',
-                        style: TextStyle(color: Colors.white70, fontSize: 15),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ],
-                ),
-                // Left-aligned names (no extra left padding to avoid overflow)
-                children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('• Aesha', style: TextStyle(color: Colors.white60)),
-                        SizedBox(height: 4),
-                        Text('• Briand', style: TextStyle(color: Colors.white60)),
-                        SizedBox(height: 4),
-                        Text('• Chengrun', style: TextStyle(color: Colors.white60)),
-                        SizedBox(height: 4),
-                        Text('• Gulshan', style: TextStyle(color: Colors.white60)),
-                        SizedBox(height: 4),
-                        Text('• Kathan', style: TextStyle(color: Colors.white60)),
-                        SizedBox(height: 4),
-                        Text('• Omprakash', style: TextStyle(color: Colors.white60)),
-                        SizedBox(height: 4),
-                        Text('• Safira', style: TextStyle(color: Colors.white60)),
-                        SizedBox(height: 4),
-                        Text('• Vivek', style: TextStyle(color: Colors.white60)),
-                        SizedBox(height: 4),
-                        Text('• Yecheng', style: TextStyle(color: Colors.white60)),
-                        SizedBox(height: 4),
-                        Text('• Zhijie', style: TextStyle(color: Colors.white60)),
-                        SizedBox(height: 4),
-                        Text('• Zhiyuan', style: TextStyle(color: Colors.white60)),
-                      ],
-                    ),
-                  ),
-                ],
+          ),
+          const SizedBox(height: 12),
+
+          TextField(
+            controller: _feedbackController,
+            maxLines: 4,
+            style: const TextStyle(color: Colors.white),
+            decoration: InputDecoration(
+              hintText: 'Write your feedback here...',
+              hintStyle: const TextStyle(color: Colors.white54),
+              filled: true,
+              fillColor: Colors.white10,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide.none,
               ),
             ),
           ),
-          const SizedBox(height: 48),
+          const SizedBox(height: 16),
 
           Center(
             child: ElevatedButton.icon(
@@ -150,6 +135,68 @@ class InfoScreen extends StatelessWidget {
           ),
           const SizedBox(height: 24),
         ],
+      ),
+    );
+  }
+
+  Widget _buildTeamInfo() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white10,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.white12),
+      ),
+      child: Theme(
+        data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+        child: const ExpansionTile(
+          iconColor: Colors.white70,
+          collapsedIconColor: Colors.white70,
+          title: Row(
+            children: [
+              Icon(Icons.code, color: Colors.white70),
+              SizedBox(width: 12),
+              Flexible(
+                child: Text(
+                  'Group 8 – Mobile Programming',
+                  style: TextStyle(color: Colors.white70, fontSize: 15),
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ],
+          ),
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('• Aesha', style: TextStyle(color: Colors.white60)),
+                  SizedBox(height: 4),
+                  Text('• Briand', style: TextStyle(color: Colors.white60)),
+                  SizedBox(height: 4),
+                  Text('• Chengrun', style: TextStyle(color: Colors.white60)),
+                  SizedBox(height: 4),
+                  Text('• Gulshan', style: TextStyle(color: Colors.white60)),
+                  SizedBox(height: 4),
+                  Text('• Kathan', style: TextStyle(color: Colors.white60)),
+                  SizedBox(height: 4),
+                  Text('• Omprakash', style: TextStyle(color: Colors.white60)),
+                  SizedBox(height: 4),
+                  Text('• Safira', style: TextStyle(color: Colors.white60)),
+                  SizedBox(height: 4),
+                  Text('• Vivek', style: TextStyle(color: Colors.white60)),
+                  SizedBox(height: 4),
+                  Text('• Yecheng', style: TextStyle(color: Colors.white60)),
+                  SizedBox(height: 4),
+                  Text('• Zhijie', style: TextStyle(color: Colors.white60)),
+                  SizedBox(height: 4),
+                  Text('• Zhiyuan', style: TextStyle(color: Colors.white60)),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
