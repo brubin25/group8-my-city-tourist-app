@@ -42,11 +42,11 @@ class GalleryScreen extends StatelessWidget {
                     margin: const EdgeInsets.symmetric(vertical: 12),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
+                      boxShadow: const [
                         BoxShadow(
                           color: Colors.black26,
                           blurRadius: 8,
-                          offset: const Offset(0, 4),
+                          offset: Offset(0, 4),
                         ),
                       ],
                     ),
@@ -124,11 +124,11 @@ class GalleryScreen extends StatelessWidget {
                 return Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    boxShadow: [
+                    boxShadow: const [
                       BoxShadow(
                         color: Colors.black12,
                         blurRadius: 6,
-                        offset: const Offset(2, 2),
+                        offset: Offset(2, 2),
                       ),
                     ],
                   ),
@@ -152,9 +152,9 @@ class GalleryScreen extends StatelessWidget {
                               horizontal: 8,
                               vertical: 4,
                             ),
-                            decoration: BoxDecoration(
+                            decoration: const BoxDecoration(
                               color: Colors.black45,
-                              borderRadius: const BorderRadius.only(
+                              borderRadius: BorderRadius.only(
                                 bottomLeft: Radius.circular(12),
                                 bottomRight: Radius.circular(12),
                               ),
