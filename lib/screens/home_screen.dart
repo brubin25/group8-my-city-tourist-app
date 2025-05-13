@@ -150,7 +150,7 @@ class HomeScreenState extends State<HomeScreen> {
     if (index == 5) {
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (_) => const MapScreen()),
+        MaterialPageRoute(builder: (_) => const LoginScreen()),
       );
     } else {
       setState(() {
